@@ -5,6 +5,60 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Middle2Class Shop - Cute Finds</title>
   <link rel="stylesheet" href="css/styles.css">
+  <!-- Inline fallback styles if CSS fails to load -->
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #faf9f7; margin: 0; color: #2d3436; }
+    header { background: linear-gradient(135deg, #4ecdc4, #2a9d8f); padding: 15px 20px; color: white; position: sticky; top: 0; z-index: 1000; }
+    .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+    .logo { font-size: 1.8rem; font-weight: 800; color: white; text-decoration: none; }
+    .search-bar { flex: 1; max-width: 450px; position: relative; }
+    .search-bar input { width: 100%; padding: 12px 45px 12px 18px; border: none; border-radius: 50px; font-size: 0.95rem; }
+    .search-bar button { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); background: #4ecdc4; border: none; border-radius: 50%; width: 36px; height: 36px; cursor: pointer; color: white; }
+    .nav-links a { color: white; text-decoration: none; padding: 8px 16px; border-radius: 50px; font-weight: 500; font-size: 0.9rem; background: rgba(255,255,255,0.15); }
+    .hero { background: linear-gradient(135deg, #a8e6e1, #faf9f7); padding: 50px 20px; text-align: center; }
+    .hero h1 { font-size: 2.5rem; color: #2a9d8f; margin-bottom: 10px; }
+    .categories { max-width: 1200px; margin: 30px auto; padding: 0 20px; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+    .category-btn { padding: 10px 24px; border: 2px solid #a8e6e1; border-radius: 50px; background: white; color: #2a9d8f; font-weight: 600; cursor: pointer; }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; padding: 0 20px 40px; }
+    .product-card { background: white; border-radius: 24px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.06); cursor: pointer; border: 1px solid rgba(78,205,196,0.1); }
+    .product-image { width: 100%; height: 220px; background: linear-gradient(135deg, #a8e6e1, #faf9f7); display: flex; align-items: center; justify-content: center; font-size: 4rem; }
+    .product-info { padding: 18px; }
+    .product-name { font-size: 1.05rem; font-weight: 700; }
+    .product-price { font-size: 1.3rem; font-weight: 800; color: #2a9d8f; }
+    footer { background: linear-gradient(135deg, #2a9d8f, #4ecdc4); color: white; padding: 40px 20px 20px; margin-top: 50px; }
+    .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+    .footer-section a { color: rgba(255,255,255,0.9); text-decoration: none; }
+    .footer-bottom { text-align: center; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.2); font-size: 0.85rem; color: rgba(255,255,255,0.8); }
+    .hidden { display: none !important; }
+  </style>
+  <!-- Auto-detect and fix CSS paths if needed -->
+  <script>
+    (function() {
+      var link = document.querySelector('link[rel="stylesheet"]');
+      if (!link) return;
+      var href = link.getAttribute('href');
+      // Try to detect if CSS loaded by checking a computed style
+      setTimeout(function() {
+        var test = document.createElement('div');
+        test.style.display = 'none';
+        document.body.appendChild(test);
+        var style = getComputedStyle(document.body);
+        // If CSS didn't load, the body won't have our custom background
+        var loaded = document.styleSheets.length > 1 || style.backgroundColor === 'rgb(250, 249, 247)';
+        if (!loaded) {
+          // Try with leading slash and repo name
+          var paths = ['css/styles.css', './css/styles.css', '/middle2class-shop/css/styles.css'];
+          for (var i = 0; i < paths.length; i++) {
+            var testLink = document.createElement('link');
+            testLink.rel = 'stylesheet';
+            testLink.href = paths[i];
+            document.head.appendChild(testLink);
+          }
+        }
+        document.body.removeChild(test);
+      }, 100);
+    })();
+  </script>
 </head>
 <body>
   <!-- HEADER -->

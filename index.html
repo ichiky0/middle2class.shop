@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Middle2Class Shop - Cute Finds</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">&#128150;</span>
+        Middle2Class
+      </a>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search products...">
+        <button id="searchBtn">&#128269;</button>
+      </div>
+      <nav class="nav-links">
+        <a href="index.html" class="active">Shop</a>
+        <a href="admin.html">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>Welcome to Middle2Class! &#127775;</h1>
+    <p>Discover cute jewellery and stationery at affordable prices. Free shipping on orders over &#8377;500!</p>
+  </section>
+
+  <!-- CATEGORIES -->
+  <div class="categories">
+    <button class="category-btn active" data-category="all">All Products</button>
+    <button class="category-btn" data-category="jewellery">&#128141; Jewellery</button>
+    <button class="category-btn" data-category="books-copies">&#128218; Books & Copies</button>
+  </div>
+
+  <!-- PRODUCTS -->
+  <section class="products-section">
+    <div class="product-grid" id="productGrid"></div>
+    <div class="empty-state hidden" id="emptyState">
+      <div class="icon">&#128269;</div>
+      <h3>No products found</h3>
+      <p>Try a different search or category!</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>About Middle2Class</h4>
+        <p>Your go-to shop for cute jewellery, stationery, and lifestyle products. Quality meets affordability!</p>
+      </div>
+      <div class="footer-section">
+        <h4>Contact Us</h4>
+        <p>&#9993; Email: <a href="mailto:middle2class.shop@gmail.com">middle2class.shop@gmail.com</a></p>
+        <p>&#128222; Phone: <a href="tel:+919599300432">+91 95993 00432</a></p>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <p><a href="index.html">Shop</a></p>
+        <p><a href="admin.html">Admin Panel</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Middle2Class Shop. All rights reserved. &#128150;</p>
+    </div>
+  </footer>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

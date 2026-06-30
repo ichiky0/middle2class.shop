@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - Middle2Class Shop</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">&#128150;</span>
+        Middle2Class
+      </a>
+      <nav class="nav-links">
+        <a href="index.html">Shop</a>
+        <a href="admin.html" class="active">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ADMIN CONTENT -->
+  <div class="admin-container" id="adminContent">
+    <div class="admin-header">
+      <h2>&#128736; Admin Panel</h2>
+      <p>Manage your products, inventory, and upload data via Excel</p>
+    </div>
+
+    <div class="admin-grid">
+      <!-- Add Product Card -->
+      <div class="admin-card">
+        <h3>&#10133; Add New Product</h3>
+        <form class="admin-form" id="addProductForm">
+          <div class="form-group">
+            <label>Product Name</label>
+            <input type="text" id="newName" required placeholder="e.g., Gold Ring">
+          </div>
+          <div class="form-group">
+            <label>Category</label>
+            <select id="newCategory" required>
+              <option value="">Select category</option>
+              <option value="jewellery">Jewellery</option>
+              <option value="books-copies">Books & Copies</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Price (&#8377;)</label>
+            <input type="number" id="newPrice" required placeholder="e.g., 299" min="0">
+          </div>
+          <div class="form-group">
+            <label>Original Price (&#8377;) <small style="color: var(--text-light);">(optional)</small></label>
+            <input type="number" id="newOriginalPrice" placeholder="e.g., 399" min="0">
+          </div>
+          <div class="form-group">
+            <label>Stock Quantity</label>
+            <input type="number" id="newStock" required placeholder="e.g., 20" min="0">
+          </div>
+          <div class="form-group">
+            <label>Image URL <small style="color: var(--text-light);">(optional, or emoji below)</small></label>
+            <input type="text" id="newImage" placeholder="https://example.com/image.jpg">
+          </div>
+          <div class="form-group">
+            <label>Emoji Icon <small style="color: var(--text-light);">(for display)</small></label>
+            <input type="text" id="newEmoji" placeholder="e.g., &#128141;" maxlength="5">
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea id="newDescription" placeholder="Describe your product..."></textarea>
+          </div>
+          <button type="submit" class="admin-btn">&#10133; Add Product</button>
+        </form>
+      </div>
+
+      <!-- Excel Upload Card -->
+      <div class="admin-card">
+        <h3>&#128230; Bulk Upload via Excel</h3>
+        <p style="color: var(--text-medium); font-size: 0.9rem; margin-bottom: 15px;">
+          Upload a CSV file with columns: <strong>name, category, price, originalPrice, stock, description, emoji</strong>
+        </p>
+        <div class="excel-upload" id="excelUploadArea">
+          <input type="file" id="excelFile" accept=".csv,.xlsx">
+          <label for="excelFile" class="excel-upload-label">
+            <span class="icon">&#128229;</span>
+            <span>Click or drag file here</span>
+            <span class="hint">Supports .csv and .xlsx files</span>
+          </label>
+        </div>
+        <button class="admin-btn secondary" id="downloadTemplate" style="width: 100%; margin-bottom: 10px;">
+          &#128190; Download Template
+        </button>
+        <button class="admin-btn" id="processExcel" style="width: 100%;" disabled>
+          &#9989; Process & Add Products
+        </button>
+      </div>
+    </div>
+
+    <!-- Product List Table -->
+    <div class="admin-table-wrapper">
+      <h3>&#128203; All Products</h3>
+      <table class="admin-table" id="adminTable">
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="adminTableBody"></tbody>
+      </table>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px;">
+      <button class="admin-btn danger" id="resetDataBtn">&#128465; Reset All Data</button>
+      <button class="admin-btn secondary" id="logoutBtn" style="margin-left: 10px;">&#128682; Logout</button>
+    </div>
+  </div>
+
+  <!-- LOGIN MODAL -->
+  <div class="modal-overlay login-modal" id="loginModal">
+    <div class="modal">
+      <div class="modal-icon">&#128272;</div>
+      <h3>Admin Login</h3>
+      <p>Please enter the admin password to continue.</p>
+      <input type="password" id="adminPassword" placeholder="Enter password">
+      <div class="modal-buttons">
+        <button class="admin-btn" id="loginBtn">Login</button>
+        <a href="index.html" class="admin-btn secondary" style="text-decoration: none;">Cancel</a>
+      </div>
+      <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 15px;">
+        Default password: <strong>admin123</strong>
+      </p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>About Middle2Class</h4>
+        <p>Your go-to shop for cute jewellery, stationery, and lifestyle products. Quality meets affordability!</p>
+      </div>
+      <div class="footer-section">
+        <h4>Contact Us</h4>
+        <p>&#9993; Email: <a href="mailto:middle2class.shop@gmail.com">middle2class.shop@gmail.com</a></p>
+        <p>&#128222; Phone: <a href="tel:+919599300432">+91 95993 00432</a></p>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <p><a href="index.html">Shop</a></p>
+        <p><a href="admin.html">Admin Panel</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Middle2Class Shop. All rights reserved. &#128150;</p>
+    </div>
+  </footer>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

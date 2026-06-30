@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details - Middle2Class Shop</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">&#128150;</span>
+        Middle2Class
+      </a>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search products...">
+        <button id="searchBtn">&#128269;</button>
+      </div>
+      <nav class="nav-links">
+        <a href="index.html">Shop</a>
+        <a href="admin.html">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- PRODUCT DETAIL -->
+  <div class="product-detail-container">
+    <a href="index.html" class="back-link">&#8592; Back to Shop</a>
+
+    <div class="product-detail" id="productDetail">
+      <!-- Populated by JS -->
+    </div>
+
+    <!-- Reviews Section -->
+    <div class="reviews-section">
+      <h3>&#11088; Customer Reviews & Comments</h3>
+      <div id="reviewsList"></div>
+
+      <div class="review-form">
+        <h4>Write a Review</h4>
+        <input type="text" id="reviewerName" placeholder="Your name" required>
+        <div style="margin-bottom: 12px;">
+          <label style="font-weight: 600; color: var(--text-dark); font-size: 0.9rem;">Rating: </label>
+          <select id="reviewerRating" style="padding: 8px 12px; border: 2px solid var(--aqua-light); border-radius: var(--radius); font-size: 0.95rem; outline: none; margin-left: 5px;">
+            <option value="5">&#11088;&#11088;&#11088;&#11088;&#11088; (5)</option>
+            <option value="4">&#11088;&#11088;&#11088;&#11088; (4)</option>
+            <option value="3">&#11088;&#11088;&#11088; (3)</option>
+            <option value="2">&#11088;&#11088; (2)</option>
+            <option value="1">&#11088; (1)</option>
+          </select>
+        </div>
+        <textarea id="reviewerText" placeholder="Share your thoughts about this product..." required></textarea>
+        <button id="submitReview">Submit Review</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>About Middle2Class</h4>
+        <p>Your go-to shop for cute jewellery, stationery, and lifestyle products. Quality meets affordability!</p>
+      </div>
+      <div class="footer-section">
+        <h4>Contact Us</h4>
+        <p>&#9993; Email: <a href="mailto:middle2class.shop@gmail.com">middle2class.shop@gmail.com</a></p>
+        <p>&#128222; Phone: <a href="tel:+919599300432">+91 95993 00432</a></p>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <p><a href="index.html">Shop</a></p>
+        <p><a href="admin.html">Admin Panel</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Middle2Class Shop. All rights reserved. &#128150;</p>
+    </div>
+  </footer>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/product.js"></script>
+</body>
+</html>

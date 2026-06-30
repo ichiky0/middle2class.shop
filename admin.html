@@ -5,6 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Panel - Middle2Class Shop</title>
   <link rel="stylesheet" href="css/styles.css">
+  <!-- CRITICAL: Admin content is hidden by default via inline style -->
+  <!-- Even if CSS and JS fail, admin content stays hidden until login -->
+  <style>
+    /* Admin protection - content hidden by default */
+    #adminContent { display: none; }
+    #loginModal { display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 9999; }
+    #loginModal .modal { background: white; border-radius: 24px; padding: 30px; max-width: 400px; width: 90%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+    #loginModal h3 { color: #2a9d8f; margin-bottom: 10px; font-size: 1.5rem; }
+    #loginModal input { width: 100%; padding: 12px 16px; border: 2px solid #a8e6e1; border-radius: 16px; margin-bottom: 15px; font-size: 1rem; outline: none; }
+    #loginModal button { background: #4ecdc4; color: white; border: none; padding: 12px 24px; border-radius: 50px; font-weight: 600; cursor: pointer; font-size: 0.95rem; }
+    #loginModal a { background: #a8e6e1; color: #2a9d8f; text-decoration: none; padding: 12px 24px; border-radius: 50px; font-weight: 600; font-size: 0.95rem; display: inline-block; }
+    /* Rest of fallback styles */
+    body { font-family: 'Segoe UI', sans-serif; background: #faf9f7; margin: 0; color: #2d3436; }
+    header { background: linear-gradient(135deg, #4ecdc4, #2a9d8f); padding: 15px 20px; color: white; position: sticky; top: 0; z-index: 1000; }
+    .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+    .logo { font-size: 1.8rem; font-weight: 800; color: white; text-decoration: none; }
+    .nav-links a { color: white; text-decoration: none; padding: 8px 16px; border-radius: 50px; font-weight: 500; font-size: 0.9rem; background: rgba(255,255,255,0.15); }
+    footer { background: linear-gradient(135deg, #2a9d8f, #4ecdc4); color: white; padding: 40px 20px 20px; margin-top: 50px; }
+    .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+    .footer-section a { color: rgba(255,255,255,0.9); text-decoration: none; }
+    .footer-bottom { text-align: center; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.2); font-size: 0.85rem; color: rgba(255,255,255,0.8); }
+  </style>
+  <!-- Auto-detect and fix CSS paths if needed -->
+  <script>
+    (function() {
+      var link = document.querySelector('link[rel="stylesheet"]');
+      if (!link) return;
+      setTimeout(function() {
+        var loaded = document.styleSheets.length > 1;
+        if (!loaded) {
+          var paths = ['css/styles.css', './css/styles.css', '/middle2class-shop/css/styles.css'];
+          for (var i = 0; i < paths.length; i++) {
+            var testLink = document.createElement('link');
+            testLink.rel = 'stylesheet';
+            testLink.href = paths[i];
+            document.head.appendChild(testLink);
+          }
+        }
+      }, 100);
+    })();
+  </script>
 </head>
 <body>
   <!-- HEADER -->
@@ -21,7 +62,7 @@
     </div>
   </header>
 
-  <!-- ADMIN CONTENT -->
+  <!-- ADMIN CONTENT - hidden by default via inline CSS above -->
   <div class="admin-container" id="adminContent">
     <div class="admin-header">
       <h2>&#128736; Admin Panel</h2>
@@ -50,7 +91,7 @@
             <input type="number" id="newPrice" required placeholder="e.g., 299" min="0">
           </div>
           <div class="form-group">
-            <label>Original Price (&#8377;) <small style="color: var(--text-light);">(optional)</small></label>
+            <label>Original Price (&#8377;) <small style="color: #b2bec3;">(optional)</small></label>
             <input type="number" id="newOriginalPrice" placeholder="e.g., 399" min="0">
           </div>
           <div class="form-group">
@@ -58,11 +99,11 @@
             <input type="number" id="newStock" required placeholder="e.g., 20" min="0">
           </div>
           <div class="form-group">
-            <label>Image URL <small style="color: var(--text-light);">(optional, or emoji below)</small></label>
+            <label>Image URL <small style="color: #b2bec3;">(optional, or emoji below)</small></label>
             <input type="text" id="newImage" placeholder="https://example.com/image.jpg">
           </div>
           <div class="form-group">
-            <label>Emoji Icon <small style="color: var(--text-light);">(for display)</small></label>
+            <label>Emoji Icon <small style="color: #b2bec3;">(for display)</small></label>
             <input type="text" id="newEmoji" placeholder="e.g., &#128141;" maxlength="5">
           </div>
           <div class="form-group">
@@ -76,7 +117,7 @@
       <!-- Excel Upload Card -->
       <div class="admin-card">
         <h3>&#128230; Bulk Upload via Excel</h3>
-        <p style="color: var(--text-medium); font-size: 0.9rem; margin-bottom: 15px;">
+        <p style="color: #636e72; font-size: 0.9rem; margin-bottom: 15px;">
           Upload a CSV file with columns: <strong>name, category, price, originalPrice, stock, description, emoji</strong>
         </p>
         <div class="excel-upload" id="excelUploadArea">
@@ -120,7 +161,7 @@
     </div>
   </div>
 
-  <!-- LOGIN MODAL -->
+  <!-- LOGIN MODAL - always visible by default, CSS hides it after login -->
   <div class="modal-overlay login-modal" id="loginModal">
     <div class="modal">
       <div class="modal-icon">&#128272;</div>
@@ -131,7 +172,7 @@
         <button class="admin-btn" id="loginBtn">Login</button>
         <a href="index.html" class="admin-btn secondary" style="text-decoration: none;">Cancel</a>
       </div>
-      <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 15px;">
+      <p style="font-size: 0.8rem; color: #b2bec3; margin-top: 15px;">
         Default password: <strong>admin123</strong>
       </p>
     </div>

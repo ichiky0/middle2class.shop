@@ -3,6 +3,10 @@
    ============================================ */
 
 (function() {
+  // SECURITY: Always clear any previous admin session on page load
+  // This ensures the admin password is ALWAYS required
+  DataStore.adminLogout();
+
   const loginModal = document.getElementById('loginModal');
   const adminContent = document.getElementById('adminContent');
   const adminPassword = document.getElementById('adminPassword');
@@ -19,78 +23,86 @@
 
   let uploadedFile = null;
 
-  function showToast(message, type = 'success') {
+  function showToast(message, type) {
     toast.textContent = message;
-    toast.className = `toast ${type} show`;
-    setTimeout(() => {
+    toast.className = 'toast ' + (type || 'success') + ' show';
+    setTimeout(function() {
       toast.classList.remove('show');
     }, 3000);
   }
 
-  // Login check
+  // Show login modal, hide admin content
+  function showLogin() {
+    loginModal.style.display = 'flex';
+    loginModal.style.visibility = 'visible';
+    loginModal.style.opacity = '1';
+    adminContent.style.display = 'none';
+  }
+
+  // Show admin content, hide login modal
+  function showAdmin() {
+    loginModal.style.display = 'none';
+    loginModal.style.visibility = 'hidden';
+    loginModal.style.opacity = '0';
+    adminContent.style.display = 'block';
+    renderProductTable();
+  }
+
+  // Login check - ALWAYS require password on page load
   function checkLogin() {
-    if (!DataStore.isAdminLoggedIn()) {
-      loginModal.classList.add('active');
-      adminContent.style.display = 'none';
+    if (DataStore.isAdminLoggedIn()) {
+      showAdmin();
     } else {
-      loginModal.classList.remove('active');
-      adminContent.style.display = 'block';
-      renderProductTable();
+      showLogin();
     }
   }
 
-  loginBtn.addEventListener('click', () => {
+  loginBtn.addEventListener('click', function() {
     if (DataStore.adminLogin(adminPassword.value)) {
-      showToast('Welcome, Admin! &#128075;');
-      checkLogin();
+      showToast('Welcome, Admin!');
+      showAdmin();
     } else {
       showToast('Wrong password! Try again.', 'error');
       adminPassword.value = '';
     }
   });
 
-  adminPassword.addEventListener('keydown', (e) => {
+  adminPassword.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') loginBtn.click();
   });
 
-  logoutBtn.addEventListener('click', () => {
+  logoutBtn.addEventListener('click', function() {
     DataStore.adminLogout();
     showToast('Logged out successfully.');
-    setTimeout(() => {
+    setTimeout(function() {
       window.location.href = 'index.html';
     }, 1000);
   });
 
   // Render product table
   function renderProductTable() {
-    const products = DataStore.getProducts();
+    var products = DataStore.getProducts();
     adminTableBody.innerHTML = '';
 
-    products.forEach(p => {
-      const tr = document.createElement('tr');
-      const imgCell = p.image
-        ? `<img src="${p.image}" alt="${p.name}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 10px;">`
-        : `<div class="table-img">${p.emoji || '&#128230;'}</div>`;
+    products.forEach(function(p) {
+      var tr = document.createElement('tr');
+      var imgCell = p.image
+        ? '<img src="' + p.image + '" alt="' + p.name + '" style="width: 50px; height: 50px; object-fit: cover; border-radius: 10px;">'
+        : '<div class="table-img">' + (p.emoji || '&#128230;') + '</div>';
 
-      tr.innerHTML = `
-        <td>${imgCell}</td>
-        <td><strong>${p.name}</strong></td>
-        <td>${DataStore.getCategoryName(p.category)}</td>
-        <td>&#8377;${p.price}</td>
-        <td>${p.stock}</td>
-        <td>
-          <div class="actions">
-            <button class="action-btn delete" data-id="${p.id}">&#128465;</button>
-          </div>
-        </td>
-      `;
+      tr.innerHTML = '<td>' + imgCell + '</td>' +
+        '<td><strong>' + p.name + '</strong></td>' +
+        '<td>' + DataStore.getCategoryName(p.category) + '</td>' +
+        '<td>&#8377;' + p.price + '</td>' +
+        '<td>' + p.stock + '</td>' +
+        '<td><div class="actions"><button class="action-btn delete" data-id="' + p.id + '">&#128465;</button></div></td>';
       adminTableBody.appendChild(tr);
     });
 
     // Attach delete handlers
-    document.querySelectorAll('.action-btn.delete').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const id = btn.dataset.id;
+    document.querySelectorAll('.action-btn.delete').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var id = btn.dataset.id;
         if (confirm('Are you sure you want to delete this product?')) {
           DataStore.deleteProduct(id);
           renderProductTable();
@@ -101,9 +113,9 @@
   }
 
   // Add product
-  addProductForm.addEventListener('submit', (e) => {
+  addProductForm.addEventListener('submit', function(e) {
     e.preventDefault();
-    const product = {
+    var product = {
       name: document.getElementById('newName').value.trim(),
       category: document.getElementById('newCategory').value,
       price: Number(document.getElementById('newPrice').value),
@@ -117,28 +129,28 @@
     DataStore.addProduct(product);
     addProductForm.reset();
     renderProductTable();
-    showToast('Product added successfully! &#127881;');
+    showToast('Product added successfully!');
   });
 
   // Excel / CSV handling
-  excelUploadArea.addEventListener('click', () => excelFile.click());
-  excelUploadArea.addEventListener('dragover', (e) => {
+  excelUploadArea.addEventListener('click', function() { excelFile.click(); });
+  excelUploadArea.addEventListener('dragover', function(e) {
     e.preventDefault();
-    excelUploadArea.style.borderColor = 'var(--aqua)';
+    excelUploadArea.style.borderColor = '#4ecdc4';
   });
-  excelUploadArea.addEventListener('dragleave', () => {
-    excelUploadArea.style.borderColor = 'var(--aqua-light)';
+  excelUploadArea.addEventListener('dragleave', function() {
+    excelUploadArea.style.borderColor = '#a8e6e1';
   });
-  excelUploadArea.addEventListener('drop', (e) => {
+  excelUploadArea.addEventListener('drop', function(e) {
     e.preventDefault();
-    excelUploadArea.style.borderColor = 'var(--aqua-light)';
-    const files = e.dataTransfer.files;
+    excelUploadArea.style.borderColor = '#a8e6e1';
+    var files = e.dataTransfer.files;
     if (files.length > 0) {
       handleFile(files[0]);
     }
   });
 
-  excelFile.addEventListener('change', () => {
+  excelFile.addEventListener('change', function() {
     if (excelFile.files.length > 0) {
       handleFile(excelFile.files[0]);
     }
@@ -146,22 +158,22 @@
 
   function handleFile(file) {
     uploadedFile = file;
-    const label = excelUploadArea.querySelector('.excel-upload-label span:nth-child(2)');
-    label.textContent = `Selected: ${file.name}`;
+    var label = excelUploadArea.querySelector('.excel-upload-label span:nth-child(2)');
+    label.textContent = 'Selected: ' + file.name;
     processExcel.disabled = false;
   }
 
   // Simple CSV parser
   function parseCSV(text) {
-    const lines = text.split(/\r?\n/).filter(l => l.trim());
+    var lines = text.split(/\r?\n/).filter(function(l) { return l.trim(); });
     if (lines.length < 2) return [];
 
-    const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
-    const rows = [];
-    for (let i = 1; i < lines.length; i++) {
-      const values = lines[i].split(',');
-      const obj = {};
-      headers.forEach((h, idx) => {
+    var headers = lines[0].split(',').map(function(h) { return h.trim().toLowerCase(); });
+    var rows = [];
+    for (var i = 1; i < lines.length; i++) {
+      var values = lines[i].split(',');
+      var obj = {};
+      headers.forEach(function(h, idx) {
         obj[h] = values[idx] ? values[idx].trim() : '';
       });
       rows.push(obj);
@@ -169,36 +181,36 @@
     return rows;
   }
 
-  processExcel.addEventListener('click', () => {
+  processExcel.addEventListener('click', function() {
     if (!uploadedFile) return;
 
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const text = e.target.result;
-      const rows = parseCSV(text);
-      let added = 0;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var text = e.target.result;
+      var rows = parseCSV(text);
+      var added = 0;
 
-      rows.forEach(row => {
-        const name = row.name || row.productname || row.product || row['product name'] || '';
-        const category = row.category || row.type || '';
-        const price = Number(row.price || row.mrp || 0);
-        const originalPrice = Number(row.originalprice || row.original || 0);
-        const stock = Number(row.stock || row.quantity || row.qty || 0);
-        const description = row.description || row.desc || row.details || '';
-        const emoji = row.emoji || row.icon || '';
+      rows.forEach(function(row) {
+        var name = row.name || row.productname || row.product || row['product name'] || '';
+        var category = row.category || row.type || '';
+        var price = Number(row.price || row.mrp || 0);
+        var originalPrice = Number(row.originalprice || row.original || 0);
+        var stock = Number(row.stock || row.quantity || row.qty || 0);
+        var description = row.description || row.desc || row.details || '';
+        var emoji = row.emoji || row.icon || '';
 
         if (name && category && price > 0) {
-          const cat = category.toLowerCase().includes('jewel') ? 'jewellery' :
-                      category.toLowerCase().includes('book') || category.toLowerCase().includes('copy') ? 'books-copies' : 'jewellery';
+          var cat = category.toLowerCase().indexOf('jewel') !== -1 ? 'jewellery' :
+                    category.toLowerCase().indexOf('book') !== -1 || category.toLowerCase().indexOf('copy') !== -1 ? 'books-copies' : 'jewellery';
 
           DataStore.addProduct({
-            name,
+            name: name,
             category: cat,
-            price,
-            originalPrice,
-            stock,
-            description,
-            emoji,
+            price: price,
+            originalPrice: originalPrice,
+            stock: stock,
+            description: description,
+            emoji: emoji,
             image: row.image || row.img || row.imageurl || ''
           });
           added++;
@@ -206,10 +218,10 @@
       });
 
       renderProductTable();
-      showToast(`Added ${added} products from file! &#127881;`);
+      showToast('Added ' + added + ' products from file!');
       uploadedFile = null;
       processExcel.disabled = true;
-      const label = excelUploadArea.querySelector('.excel-upload-label span:nth-child(2)');
+      var label = excelUploadArea.querySelector('.excel-upload-label span:nth-child(2)');
       label.textContent = 'Click or drag file here';
       excelFile.value = '';
     };
@@ -217,20 +229,20 @@
   });
 
   // Download template
-  downloadTemplate.addEventListener('click', () => {
-    const template = 'name,category,price,originalPrice,stock,description,emoji\nSilver Necklace,jewellery,599,799,10,Beautiful silver necklace,&#128141;\nA5 Notebook,books-copies,89,120,50,Spiral notebook with dotted pages,&#128211;';
-    const blob = new Blob([template], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+  downloadTemplate.addEventListener('click', function() {
+    var template = 'name,category,price,originalPrice,stock,description,emoji\nSilver Necklace,jewellery,599,799,10,Beautiful silver necklace,\u2764\nA5 Notebook,books-copies,89,120,50,Spiral notebook with dotted pages,\u270F';
+    var blob = new Blob([template], { type: 'text/csv' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
     a.href = url;
     a.download = 'product_template.csv';
     a.click();
     URL.revokeObjectURL(url);
-    showToast('Template downloaded! &#128229;');
+    showToast('Template downloaded!');
   });
 
   // Reset data
-  resetDataBtn.addEventListener('click', () => {
+  resetDataBtn.addEventListener('click', function() {
     if (confirm('WARNING: This will delete ALL products and reviews and reset to defaults. Are you sure?')) {
       DataStore.resetData();
       renderProductTable();
@@ -238,6 +250,6 @@
     }
   });
 
-  // Initialize
-  checkLogin();
+  // Initialize - ALWAYS show login first
+  showLogin();
 })();
